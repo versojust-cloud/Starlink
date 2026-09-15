@@ -69,6 +69,16 @@ wrangler.toml.backup
 *.temp
 *.log
 
+# Zotero 临时库(数据处理脚本的中间产物,不应入库)
+.tmp_*.sqlite
+.tmp_*.sqlite.bak
+
+# pdf 渲染过程中生成的 fontconfig 缓存
+tmp/pdfs/.cache/
+
+# macOS 重名下载产生的副本,如 "pnpm-lock 2.yaml"
+pnpm-lock [0-9]*.yaml
+
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
