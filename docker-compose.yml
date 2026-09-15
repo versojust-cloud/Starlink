@@ -1,0 +1,93 @@
+# Starlink production / staging stack.
+#
+# Usage:
+#   docker compose up -d                 # full stack: PG + Redis + server
+#   docker compose up -d postgres redis  # deps only (server runs locally via pnpm dev)
+#   docker compose logs -f server        # tail server logs
+#
+# First boot: PG runs the pgvector init in initdb hook (CREATE EXTENSION vector).
+# Migration is on the user — run `pnpm --filter @starlink/server db:migrate`
+# from the host once the stack is up, with DATABASE_URL pointed at port 5432.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: starlink-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: starlink
+      POSTGRES_PASSWORD: starlink_dev
+      POSTGRES_DB: starlink
+    ports:
+      - "5432:5432"
+    volumes:
+      - starlink-pg-data:/var/lib/postgresql/data
+      - ./scripts/postgres-init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U starlink -d starlink"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: starlink-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - starlink-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  server:
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile
+    container_name: starlink-server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Connection — point at the in-network service names, NOT host:5432
+      DATABASE_URL: postgres://starlink:starlink_dev@postgres:5432/starlink
+      REDIS_URL: redis://redis:6379
+      PORT: "4000"
+      NODE_ENV: production
+      # Production gates — populate via .env or your secrets store
+      AUTH_MODE: ${AUTH_MODE:-disabled}
+      AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:-}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      # LLM
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://api.deepseek.com/v1}
+      LLM_MODEL: ${LLM_MODEL:-deepseek-chat}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      # Embedding (optional but strongly recommended for KB)
+      EMBEDDING_API_URL: ${EMBEDDING_API_URL:-}
+      EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+      # Feature flags
+      ORCHESTRATION_MODE: ${ORCHESTRATION_MODE:-legacy}
+      LANGGRAPH_CHECKPOINTER_ENABLED: ${LANGGRAPH_CHECKPOINTER_ENABLED:-true}
+      MEMORY_READ_ENABLED: ${MEMORY_READ_ENABLED:-true}
+      MEMORY_WRITE_ENABLED: ${MEMORY_WRITE_ENABLED:-true}
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://127.0.0.1:4000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  starlink-pg-data:
+  starlink-redis-data:

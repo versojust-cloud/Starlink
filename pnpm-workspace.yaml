@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@apollo/protobufjs'
+  - core-js
+  - leveldown
+  - unrs-resolver

@@ -1,0 +1,22 @@
+-- =============================================================================
+-- Migration 018 · DROP TABLE conversation_sessions (P14 finalize)
+-- =============================================================================
+-- The conversation_sessions table was deprecated by migration 017
+-- (2026-05-09) when the conversations + runs split landed. All readers
+-- and writers in the codebase have been rewired to the new tables; the
+-- audit at the time of this drop confirmed:
+--
+--   $ grep -rn "conversation_sessions" packages/server/src --include="*.ts"
+--   (only doc comments / migration files reference the name; no SQL
+--    queries or DDL outside this migration file)
+--
+-- Backfill from migration 017 already populated conversations + runs
+-- 1:1 (each conversation_sessions row → 1 conversations + 1 runs row),
+-- so no data loss. The deprecation comment placed by 017 expires here.
+--
+-- The conversation_messages.conversation_id FK already references
+-- conversations(id) (rewired by 017), so dropping the legacy table
+-- doesn't break referential integrity.
+-- =============================================================================
+
+DROP TABLE IF EXISTS conversation_sessions;

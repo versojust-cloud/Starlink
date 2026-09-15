@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Starlink Agent Profile",
+  "description": "YAML contract for agents under packages/server/src/agents/<name>/agent.yaml. Mirrors AgentProfileSchema in capabilities/profile-schema.ts.",
+  "type": "object",
+  "required": ["version", "id", "name", "capabilities", "system_prompt"],
+  "properties": {
+    "version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "role": { "enum": ["generator", "advisor", "meta"], "default": "generator" },
+    "language": { "enum": ["zh-CN", "en-US"], "default": "zh-CN" },
+    "model": { "type": "string", "default": "gpt-4o-mini" },
+    "temperature": { "type": "number", "minimum": 0, "maximum": 2, "default": 0.3 },
+    "max_tokens": { "type": "integer", "exclusiveMinimum": 0, "default": 2000 },
+    "timeout_ms": { "type": "integer", "exclusiveMinimum": 0, "default": 30000 },
+    "retries": { "type": "integer", "minimum": 0, "maximum": 5, "default": 1 },
+    "cacheable": { "type": "boolean", "default": false },
+    "tools": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "knowledge_bases": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "critic_policy": { "enum": ["off", "lenient", "strict"], "default": "strict" },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["kind", "dimension"],
+            "properties": {
+              "kind": { "const": "generate" },
+              "dimension": {
+                "enum": [
+                  "CUSTOMER_SEGMENTS", "VALUE_PROPOSITIONS", "CHANNELS",
+                  "CUSTOMER_RELATIONSHIPS", "REVENUE_STREAMS", "KEY_RESOURCES",
+                  "KEY_ACTIVITIES", "KEY_PARTNERSHIPS", "COST_STRUCTURE"
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["kind", "mode"],
+            "properties": {
+              "kind": { "const": "critique" },
+              "mode": {
+                "enum": ["devils-advocate", "evidence-checker", "conflict-detector",
+                         "logical-auditor", "gap-hunter"]
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["kind", "framework"],
+            "properties": {
+              "kind": { "const": "advise" },
+              "framework": { "enum": ["swot", "blue-ocean", "jtbd"] }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["kind", "scope"],
+            "properties": {
+              "kind": { "const": "reflect" },
+              "scope": { "enum": ["single_round", "multi_round_evolution"] }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["kind", "strategy"],
+            "properties": {
+              "kind": { "const": "refine" },
+              "strategy": { "enum": ["minimal_change", "full_rewrite"] }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "system_prompt": { "type": "string", "minLength": 20 },
+    "few_shot": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "required": ["input"],
+        "properties": {
+          "input": { "type": "string" },
+          "output_ref": { "type": "string" },
+          "output": {}
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

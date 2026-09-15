@@ -1,0 +1,28 @@
+{
+  "name": "@starlink/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rimraf dist",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "xlsx": "^0.18.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.26",
+    "@types/react-dom": "^18.3.2",
+    "typescript": "^5.9.3",
+    "rimraf": "^5.0.5"
+  }
+}

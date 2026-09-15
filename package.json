@@ -1,0 +1,26 @@
+{
+  "name": "starlink",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm --filter @starlink/web dev",
+    "dev:web": "pnpm --filter @starlink/web dev",
+    "dev:server": "pnpm --filter @starlink/server dev",
+    "dev:langgraph": "bash scripts/dev-langgraph.sh",
+    "build": "pnpm --filter @starlink/web build",
+    "build:web": "pnpm --filter @starlink/web build",
+    "build:server": "pnpm --filter @starlink/server build",
+    "test:e2e": "pnpm --filter @starlink/web test:e2e",
+    "test:e2e:headed": "pnpm --filter @starlink/web test:e2e:headed",
+    "test:e2e:knowledge": "pnpm --filter @starlink/web test:e2e:knowledge",
+    "test:e2e:knowledge:flow": "pnpm --filter @starlink/web test:e2e:knowledge:flow",
+    "test:e2e:knowledge:recovery": "pnpm --filter @starlink/web test:e2e:knowledge:recovery"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.78.0"
+  }
+}

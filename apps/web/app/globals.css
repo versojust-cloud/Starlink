@@ -1,0 +1,433 @@
+/* Editorial Boardroom v2 — canonical tokens live in
+   src/shared/design-system/tokens-v2.ts. Three font roles:
+   Fraunces (display) and JetBrains Mono (instrument) load browser-side
+   via @import below; Geist Sans (body) loads via next/font in
+   app/layout.tsx. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 6% 97%;
+    --foreground: 222 24% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 24% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 24% 12%;
+    --primary: 220.1 85.1% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 222 20% 92%;
+    --secondary-foreground: 222 24% 12%;
+    --muted: 220 20% 85%;
+    --muted-foreground: 222 24% 35%;
+    --accent: 220 20% 88%;
+    --accent-foreground: 222 24% 18%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 224 25% 88%;
+    --input: 224 25% 88%;
+    --ring: 220.1 85.1% 50%;
+    --radius: 0.5rem;
+
+    --canvas-primary: 220.1 85.1% 50%;
+    --canvas-bg: 240 12.5% 96.9%;
+    --canvas-surface: 0 0% 100%;
+    --canvas-panel: 220 36% 95.1%;
+    --canvas-card: 0 0% 100%;
+    --canvas-border: 223.3 33.3% 89.4%;
+    --canvas-text: 222.2 47.4% 11.2%;
+    --canvas-muted: 215.3 19.3% 34.5%;
+    --canvas-subtle: 215 20.2% 65.1%;
+    --canvas-grid: 232.5 100% 93.7%;
+    --canvas-scroll-track: 228 25% 92.2%;
+    --canvas-scroll-thumb: 217.1 20.4% 79.8%;
+    --canvas-scroll-thumb-hover: 215.2 17% 66.5%;
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+:root {
+  --neutral-light: #e2e8f0;
+  --neutral-mid: #94a3b8;
+  --neutral-dark: #334155;
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-effect-blur: blur(12px);
+  --border-radius-lg: 24px;
+  --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.3);
+  --transition-fast: 200ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+  --font-editorial: ui-sans-serif, system-ui, sans-serif;
+  --font-interface: ui-sans-serif, system-ui, sans-serif;
+  --stratum-surface: #f7f9fb;
+  --stratum-surface-low: #f2f4f6;
+  --stratum-surface-raised: #ffffff;
+  --stratum-panel: #eef2f6;
+  --stratum-ink: #191c1e;
+  --stratum-muted: #6b7280;
+  --stratum-line: rgba(19, 27, 46, 0.08);
+  --stratum-navy: #131b2e;
+  --stratum-blue: #008cc7;
+  --stratum-sky: #89ceff;
+  --stratum-shadow: 0 24px 48px rgba(19, 27, 46, 0.08);
+  --stratum-glow: linear-gradient(135deg, #008cc7 0%, #131b2e 100%);
+
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+
+.canvas-page-shell * {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.title-font {
+  font-family: var(--font-fraunces);
+}
+
+.mono-font {
+  font-family: var(--font-jetbrains-mono);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3), 0 0 40px rgba(251, 191, 36, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.5), 0 0 60px rgba(251, 191, 36, 0.2);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glow-border {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.2), inset 0 0 20px rgba(251, 191, 36, 0.05);
+}
+
+.stratum-shell {
+  font-family: var(--font-interface);
+}
+
+.stratum-shell h1,
+.stratum-shell h2,
+.stratum-shell h3,
+.stratum-display {
+  font-family: var(--font-editorial);
+  letter-spacing: -0.02em;
+}
+
+.stratum-card {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--stratum-shadow);
+}
+
+.stratum-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+}
+
+body {
+  background-color: hsl(var(--canvas-bg));
+  color: hsl(var(--canvas-text));
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.canvas-grid {
+  background-color: hsl(var(--canvas-bg));
+  background-image:
+    linear-gradient(to right, hsl(var(--canvas-grid)) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--canvas-grid)) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Stratum Engine canvas surface — light theme dot grid handled by
+   ReactFlow Background variant=Dots, so this rule only sets the
+   surface color underneath. */
+.canvas-flow-surface {
+  background-color: #F7F9FB;
+}
+
+.react-flow__node.canvas-node {
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.react-flow__node.canvas-node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 45px -36px rgba(64, 84, 172, 0.55);
+}
+
+/* Canvas node chrome */
+.react-flow__node.canvas-panel-node {
+  transition: all 0.2s ease;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.react-flow__node.canvas-panel-node:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.react-flow__node.canvas-panel-node.executing {
+  box-shadow: 0 0 0 2px #4ade80, 0 8px 24px rgba(74, 222, 128, 0.3);
+}
+
+.react-flow__node.animate-canvas-node {
+  animation: canvas-node-pop 0.45s ease forwards;
+}
+
+@keyframes canvas-node-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.react-flow__edge.animate-canvas-edge {
+  opacity: 0;
+  animation: canvas-edge-fade 0.4s ease forwards;
+}
+
+@keyframes canvas-edge-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 3D Flip Card Animation Classes */
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Enhanced flip animation with smooth transitions */
+.flip-container {
+  transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.flip-container:hover {
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Custom scrollbar aligned with workspace palette */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--canvas-scroll-track));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--canvas-scroll-thumb));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--canvas-scroll-thumb-hover));
+}
+
+/* ─── Starlink Ideation: brand-glyph twinkle + ring drift ───
+ *
+ * Used by features/ideation/components/starlink-glyph.tsx
+ * and the empty-state centerpiece. Subtle by design — no
+ * scale/rotate, only opacity oscillation.
+ */
+@keyframes starlinkTwinkleA {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@keyframes starlinkTwinkleB {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.35; }
+}
+@keyframes starlinkRingDrift {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.starlink-twinkle-a { animation: starlinkTwinkleA 3.6s ease-in-out infinite; }
+.starlink-twinkle-b { animation: starlinkTwinkleB 5.2s ease-in-out infinite; }
+
+/* Coach status indicators
+ *
+ * starlinkPulseFade  — used by .starlink-pulse on the LED dot in the header
+ *                      and the LLM kicker in the thinking bubble. Gentle
+ *                      breathing fade (0.5 → 1.0). NOT applied to body text
+ *                      (which would distract); reserved for status pips.
+ * starlinkSweep      — radar-style hairline that travels the bottom of the
+ *                      thinking bubble while a reflection is in-flight.
+ *                      Replaces the generic "3 bouncing dots" so the
+ *                      indicator is visually distinct from a chatbot
+ *                      ellipsis.
+ */
+@keyframes starlinkPulseFade {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+@keyframes starlinkSweep {
+  0%   { left: -33%; }
+  100% { left: 100%; }
+}
+.starlink-pulse { animation: starlinkPulseFade 1.6s ease-in-out infinite; }
+
+/* ============================================================================
+   Editorial Boardroom v2 — surface tokens. Canonical source of truth is
+   src/shared/design-system/tokens-v2.ts; the CSS variables below mirror
+   it for inline-style call sites. --font-geist-sans is bound by
+   next/font from app/layout.tsx; --font-fraunces and
+   --font-jetbrains-mono are declared here against the @imported faces.
+   ============================================================================ */
+
+:root {
+  --font-fraunces:       'Fraunces', ui-serif, Georgia, serif;
+  --font-jetbrains-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Color — ink-on-paper inversion */
+  --editorial-ink:        #0A0A0A;
+  --editorial-ink-ash1:   #161514;
+  --editorial-ink-ash2:   #2A2826;
+  --editorial-ink-ash3:   #4A4744;
+  --editorial-ink-ash4:   #8A8784;
+
+  --editorial-paper:      #F4F0E8;
+  --editorial-paper-ash1: #ECEAE4;
+  --editorial-paper-ash2: #D8D5CE;
+  --editorial-paper-ash3: #6E6B66;
+
+  /* Sole accent — newsroom red. Use SPARINGLY (one per screen). */
+  --editorial-press:        #B33028;
+  --editorial-press-active: #8F2620;
+  --editorial-press-wash:   #F2D6D2;
+
+  /* Three rule weights (newspaper convention) */
+  --editorial-rule-strong: 1.5px solid rgba(22, 21, 20, 0.8);
+  --editorial-rule-mid:    1px   solid rgba(42, 40, 38, 0.4);
+  --editorial-rule-hair:   0.5px solid rgba(74, 71, 68, 0.16);
+
+  /* Reading-measure caps */
+  --editorial-measure-body:    64ch;
+  --editorial-measure-cell:    52ch;
+  --editorial-measure-display: 32ch;
+
+  /* Motion — durations match motion.ts spec; do NOT exceed 200ms */
+  --editorial-motion-publish:  80ms;
+  --editorial-motion-swap:    120ms;
+  --editorial-motion-fold:    200ms;
+}
+
+/* Paper grain texture — apply to a relative-positioned container.
+   The grain layer is absolute-pinned, multiply-blended for paper, and
+   completely pointer-events: none. Single-layer per visible region. */
+.bg-grain-paper {
+  position: relative;
+}
+.bg-grain-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/editorial-grain.svg');
+  background-repeat: repeat;
+  opacity: 0.04;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+.bg-grain-ink {
+  position: relative;
+}
+.bg-grain-ink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/editorial-grain.svg');
+  background-repeat: repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 0;
+}
+
+/* Reduced motion — disable v2 animations entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-editorial-publish,
+  .animate-editorial-swap {
+    animation: none !important;
+  }
+}

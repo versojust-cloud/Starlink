@@ -1,0 +1,50 @@
+name: Web Knowledge E2E
+
+on:
+  pull_request:
+    paths:
+      - 'apps/web/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/web-knowledge-e2e.yml'
+  workflow_dispatch:
+
+jobs:
+  knowledge-e2e:
+    runs-on: ubuntu-latest
+    env:
+      # 强制关闭 tracing，即使将来 E2E 启动 server 也不消耗 LangSmith 配额
+      # 详见 starlink-langsmith-day1-roundtable.md §3.6
+      LANGSMITH_TRACING: "false"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: flow
+            command: pnpm test:e2e:knowledge:flow
+          - suite: recovery
+            command: pnpm test:e2e:knowledge:recovery
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter @starlink/web exec playwright install --with-deps chromium
+
+      - name: Run knowledge e2e (${{ matrix.suite }})
+        run: ${{ matrix.command }}

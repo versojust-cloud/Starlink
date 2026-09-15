@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+model KnowledgeVector {
+  id        String   @id @default(uuid())
+  docId     String
+  chunk     String
+  embedding Unsupported("vector(1536)")
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([docId])
+}
+
+// ── Flow Workflow Models ─────────────────────────────
+
+model Flow {
+  id          String   @id @default(uuid())
+  workspaceId String
+  name        String
+  description String?
+  definition  Json
+  isTemplate  Boolean  @default(false)
+  version     Int      @default(1)
+  ownerId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  executions FlowExecution[]
+
+  @@index([workspaceId])
+}
+
+model FlowExecution {
+  id          String    @id @default(uuid())
+  flowId      String
+  flow        Flow      @relation(fields: [flowId], references: [id])
+  status      String    @default("pending")
+  inputs      Json?
+  state       Json?
+  error       String?
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  nodeStates FlowNodeState[]
+
+  @@index([flowId])
+}
+
+model FlowNodeState {
+  id          String         @id @default(uuid())
+  executionId String
+  execution   FlowExecution  @relation(fields: [executionId], references: [id])
+  nodeId      String
+  status      String         @default("pending")
+  input       Json?
+  output      Json?
+  error       String?
+  startedAt   DateTime?
+  completedAt DateTime?
+  duration    Int?
+
+  @@unique([executionId, nodeId])
+}

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Branching Chat Workspace - One-Page Summary</title>
+  <style>
+    @page {
+      size: Letter;
+      margin: 0.45in;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #0f172a;
+      line-height: 1.24;
+      font-size: 10.5pt;
+    }
+    .sheet {
+      height: 100%;
+      border: 1px solid #d6dde8;
+      border-radius: 8px;
+      padding: 14px 16px 12px;
+      background: #ffffff;
+    }
+    h1 {
+      margin: 0 0 3px;
+      font-size: 18pt;
+      line-height: 1.05;
+      letter-spacing: 0.2px;
+    }
+    .subtitle {
+      margin: 0 0 8px;
+      color: #334155;
+      font-size: 9pt;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 12px;
+    }
+    h2 {
+      margin: 8px 0 4px;
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #0b4f79;
+      border-bottom: 1px solid #dbe6ee;
+      padding-bottom: 2px;
+    }
+    p { margin: 2px 0; }
+    ul {
+      margin: 4px 0 0 14px;
+      padding: 0;
+    }
+    li { margin: 2px 0; }
+    .stack { margin-top: 4px; }
+    .mono {
+      font-family: Menlo, Consolas, Monaco, 'Courier New', monospace;
+      font-size: 8.8pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 6px 7px;
+      white-space: pre-wrap;
+      line-height: 1.3;
+      margin-top: 5px;
+    }
+    .note {
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px dashed #d5deea;
+      font-size: 8.2pt;
+      color: #475569;
+    }
+    .small {
+      font-size: 8.4pt;
+      color: #334155;
+    }
+    .chip {
+      display: inline-block;
+      border: 1px solid #d2deea;
+      border-radius: 999px;
+      padding: 1px 7px;
+      margin-right: 5px;
+      font-size: 8pt;
+      color: #0b4f79;
+      background: #f2f8fc;
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <h1>Branching Chat Workspace</h1>
+    <p class="subtitle">One-page repo-based summary</p>
+
+    <div class="grid">
+      <div>
+        <h2>What It Is</h2>
+        <p>This is a runnable multi-service "Kuse" style branching research canvas app. It combines a Next.js canvas client, a GraphQL gateway, and shared schemas to generate, stream, and persist graph-based conversations.</p>
+
+        <h2>Who It Is For</h2>
+        <p>Primary persona: users who need to break complex questions into structured, visual branching graphs for research/planning workflows.</p>
+        <p class="small">Specific job title/industry targeting: <strong>Not found in repo.</strong></p>
+
+        <h2>What It Does</h2>
+        <ul>
+          <li>Provides a multi-panel workspace UI (canvas viewport, assistant panel, toolbar, node palette, document drawer, timeline history panel).</li>
+          <li>Loads canvas graph data via GraphQL <span class="mono" style="padding:1px 4px; display:inline;">workspaceGraph</span> query.</li>
+          <li>Lets users add nodes and connect nodes through GraphQL mutations (<span class="mono" style="padding:1px 4px; display:inline;">addNode</span>, <span class="mono" style="padding:1px 4px; display:inline;">connectNodes</span>).</li>
+          <li>Starts AI-driven graph generation with <span class="mono" style="padding:1px 4px; display:inline;">startConversation</span>.</li>
+          <li>Streams incremental graph/status updates with GraphQL subscription <span class="mono" style="padding:1px 4px; display:inline;">conversationProgress</span> over WebSocket.</li>
+          <li>Persists workspace graphs to PostgreSQL table <span class="mono" style="padding:1px 4px; display:inline;">canvas_graphs</span>.</li>
+          <li>Includes knowledge-base task flows (create/publish KB, seed/import URL, status tracking, and file import proxy to task service).</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>How It Works</h2>
+        <p><span class="chip">apps/web</span><span class="chip">packages/server</span><span class="chip">packages/shared</span><span class="chip">backend</span></p>
+        <div class="mono">1) Frontend (Next.js):
+   - Uses graphql-request + React Query for queries/mutations
+   - Uses graphql-ws for subscription streaming
+
+2) Gateway (Express + Apollo):
+   - Exposes /graphql (HTTP + WS)
+   - Resolvers call ConversationStore + KB task service helpers
+
+3) Conversation engine:
+   - startConversation -> ConversationStore -> BusinessLangGraphService
+   - Emits graph/appended, graph/diff, status events via PubSub
+
+4) Data and services:
+   - Canvas graphs saved/loaded in PostgreSQL (canvas_graphs)
+   - KB task status kept in TaskEventStore (in-memory projection)
+   - Gateway proxies KB file import to backend task service (:4001)
+   - Supabase and Dify integration code exists; usage depends on config/route path</div>
+
+        <h2>How To Run (Minimal)</h2>
+        <ol style="margin:4px 0 0 16px; padding:0;">
+          <li>From repo root: <span class="mono" style="padding:1px 4px; display:inline;">pnpm install</span></li>
+          <li>Create <span class="mono" style="padding:1px 4px; display:inline;">packages/server/.env</span> with at least <span class="mono" style="padding:1px 4px; display:inline;">DATABASE_URL</span> (and <span class="mono" style="padding:1px 4px; display:inline;">KB_TASK_SERVICE_URL</span> if using KB task APIs).</li>
+          <li>Start GraphQL gateway: <span class="mono" style="padding:1px 4px; display:inline;">pnpm dev:server</span> (http://localhost:4000/graphql)</li>
+          <li>Start frontend: <span class="mono" style="padding:1px 4px; display:inline;">pnpm dev:web</span> (http://localhost:3000)</li>
+          <li>Optional for KB import/indexing flows: run standalone backend service in <span class="mono" style="padding:1px 4px; display:inline;">backend/</span>.</li>
+        </ol>
+
+        <p class="note">Evidence sources: README.md, package.json, apps/web app and workspace feature files, packages/server GraphQL schema/resolvers/context/store/persistence/routes, packages/shared schemas, backend/README.md.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

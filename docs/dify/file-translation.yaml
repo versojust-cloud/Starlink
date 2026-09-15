@@ -1,0 +1,296 @@
+japp:
+  description: ''
+  icon: 📂
+  icon_background: '#E0F2FE'
+  mode: advanced-chat
+  name: 文件翻译
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai:0.1.0@539dc0dde8ecaa84e61b8eeb154c3bb7fbc9caa80afd83763dd5860a725d2742
+    version: null
+kind: app
+version: 0.4.0
+workflow:
+  conversation_variables:
+  - description: 'Text to be translated. '
+    id: e520bb9f-da6f-49a3-9da6-a3c74f1d68d6
+    name: text
+    selector:
+    - conversation
+    - text
+    value: ''
+    value_type: string
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - remote_url
+      - local_file
+      enabled: true
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: document-extractor
+      id: 1727235780030-true-1727235420145-target
+      selected: false
+      source: '1727235780030'
+      sourceHandle: 'true'
+      target: '1727235420145'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: assigner
+        targetType: answer
+      id: 1727243290238-source-1727243331745-target
+      selected: false
+      source: '1727243290238'
+      sourceHandle: source
+      target: '1727243331745'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1727244691213-source-1727244764225-target
+      selected: false
+      source: '1727244691213'
+      sourceHandle: source
+      target: '1727244764225'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 17272454043470-source-1727245512406-target
+      selected: false
+      source: '17272454043470'
+      sourceHandle: source
+      target: '1727245512406'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1727245644467-source-17272454043470-target
+      selected: false
+      source: '1727245644467'
+      sourceHandle: source
+      target: '17272454043470'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1727235780030-d8e58cc8-8c7c-4426-a596-32178b8fc6df-1727245644467-target
+      selected: false
+      source: '1727235780030'
+      sourceHandle: d8e58cc8-8c7c-4426-a596-32178b8fc6df
+      target: '1727245644467'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: if-else
+      id: 1727234055352-source-1727235780030-target
+      selected: false
+      source: '1727234055352'
+      sourceHandle: source
+      target: '1727235780030'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: assigner
+      id: 1727235420145-source-1727243290238-target
+      source: '1727235420145'
+      sourceHandle: source
+      target: '1727243290238'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: llm
+      id: 1727243331745-source-1727244691213-target
+      source: '1727243331745'
+      sourceHandle: source
+      target: '1727244691213'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 需要翻译的文件：
+          max_length: 5
+          options: []
+          required: true
+          type: file
+          variable: text
+        - label: 目标语言：
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: target_language
+      height: 114
+      id: '1727234055352'
+      position:
+        x: 30
+        y: 286.5
+      positionAbsolute:
+        x: 30
+        y: 286.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        is_array_file: false
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1727234055352'
+        - text
+      height: 92
+      id: '1727235420145'
+      position:
+        x: 638
+        y: 286.5
+      positionAbsolute:
+        x: 638
+        y: 286.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: aedd7231-30bc-450e-830f-068697835bc5
+            value: '1'
+            varType: number
+            variable_selector:
+            - sys
+            - dialogue_count
+          id: 'true'
+          logical_operator: and
+        - case_id: d8e58cc8-8c7c-4426-a596-32178b8fc6df
+          conditions:
+          - comparison_operator: '>'
+            id: 6f2dfa0d-f898-49d6-9d10-cd61ce884bed
+            value: '1'
+            varType: number
+            variable_selector:
+            - sys
+            - dialogue_count
+          id: d8e58cc8-8c7c-4426-a596-32178b8fc6df
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 条件分支
+        type: if-else
+      height: 172
+      id: '1727235780030'
+      position:
+        x: 334
+        y: 286.5
+      positionAbsolute:
+        x: 334
+        y: 286.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        assigned_variable_selector:
+        - conversation
+        - text
+        desc: ''
+        input_variable_selector:
+        - '1727235420145'
+        - text
+        selected: false
+        title: 变量赋值
+        type: assigner
+        write_mode: over-write
+      height: 84
+      id: '1727243290238'
+      position:
+        x: 942
+        y: 286.5
+...

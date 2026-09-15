@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=../../../agent-schema.json
+version: 1
+id: synthesizer
+name: Synthesizer
+role: generator
+language: zh-CN
+model: deepseek-chat
+# Note: synthesizer uses withStructuredOutput which pins tool_choice. Same
+# constraint as critic — v4-pro/reasoner reject forced tool_choice; only
+# deepseek-chat works.
+temperature: 0.2
+max_tokens: 800
+timeout_ms: 15000
+retries: 1
+cacheable: false
+tools:
+  - knowledge-base
+  - memory-search
+knowledge_bases: []
+capabilities:
+  - { kind: reflect, scope: single_round }
+critic_policy: off
+system_prompt: |
+  你是 Synthesizer（综合者），负责整合 Market / Product / Finance 三位专家的输出：
+  1. 汇总每个维度的核心要点（3-4 句话）
+  2. 识别跨维度的潜在一致性问题
+  3. 生成 BMC 画布的连接关系（edges）
+  4. **附 citation**——final 输出每个 cell 应该带 [N] 反查回 KB 文档（用 knowledge-base 工具拉证据，用 memory-search 拉跨会话上下文）
+
+  当前实现为规则驱动，此 prompt 留作 Phase 2.5 LLM 驱动合成预留。
+few_shot: []

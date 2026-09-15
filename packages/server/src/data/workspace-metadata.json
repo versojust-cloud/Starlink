@@ -1,0 +1,83 @@
+{
+  "workspaces": [
+    {
+      "workspaceId": "proj-001",
+      "name": "AI 竞品分析",
+      "type": "research-program",
+      "focus": "从访谈、竞品文档到产品策略方案",
+      "ownerId": "lead-alex",
+      "ownerName": "Alex Chen",
+      "members": [
+        {
+          "id": "lead-alex",
+          "name": "Alex Chen",
+          "role": "owner",
+          "permissions": ["workspace.read", "workspace.write", "workspace.publish", "workspace.manage"]
+        },
+        {
+          "id": "analyst-sarah",
+          "name": "Sarah Lee",
+          "role": "analyst",
+          "permissions": ["workspace.read", "workspace.write"]
+        },
+        {
+          "id": "pm-marcus",
+          "name": "Marcus Reid",
+          "role": "strategist",
+          "permissions": ["workspace.read", "workspace.write", "workspace.publish"]
+        }
+      ]
+    },
+    {
+      "workspaceId": "proj-002",
+      "name": "市场调研 - 教育行业",
+      "type": "market-study",
+      "focus": "聚焦行业趋势、定价与区域市场判断",
+      "ownerId": "lead-maria",
+      "ownerName": "Maria Garcia",
+      "members": [
+        {
+          "id": "lead-maria",
+          "name": "Maria Garcia",
+          "role": "owner",
+          "permissions": ["workspace.read", "workspace.write", "workspace.publish", "workspace.manage"]
+        },
+        {
+          "id": "research-chen",
+          "name": "Chen Wei",
+          "role": "researcher",
+          "permissions": ["workspace.read", "workspace.write"]
+        }
+      ]
+    },
+    {
+      "workspaceId": "proj-003",
+      "name": "新产品 PRD 草案",
+      "type": "product-delivery",
+      "focus": "从策略画布进入执行评审和汇报表达",
+      "ownerId": "lead-jade",
+      "ownerName": "Jade Lin",
+      "members": [
+        {
+          "id": "lead-jade",
+          "name": "Jade Lin",
+          "role": "owner",
+          "permissions": ["workspace.read", "workspace.write", "workspace.publish", "workspace.manage"]
+        },
+        {
+          "id": "design-ivy",
+          "name": "Ivy Zhou",
+          "role": "designer",
+          "permissions": ["workspace.read", "workspace.write"]
+        },
+        {
+          "id": "ops-leo",
+          "name": "Leo Wang",
+          "role": "operations",
+          "permissions": ["workspace.read", "workspace.write", "workspace.share"]
+        }
+      ]
+    }
+  ],
+  "history": []
+}
